@@ -20,21 +20,21 @@ const ASCII = `⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀�
 ⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠓⠁⠀⠀⠀⠀⠀⠀⠀`;
 
 const INFO: Array<{ key: string; value: string; color: string }> = [
-  { key: "distro", value: "Windows 11", color: "#7cd7e8" },
-  { key: "host", value: "Roe Dizon", color: "#f5d96e" },
-  { key: "uptime", value: "21 years", color: "#a8e890" },
-  { key: "kernel", value: "Software Developer Intern @ Siklab, Tech Lead @ LSCS", color: "#f08ab8" },
-  { key: "school", value: "BS Computer Science @ De La Salle University Manila", color: "#7aa8f0" },
-  { key: "shell", value: "PowerShell + WezTerm", color: "#c79af0" },
-  { key: "wm", value: "GlazeWM + Zebar", color: "#f5a96e" },
-  { key: "editor", value: "Neovim", color: "#a8e890" },
-  { key: "languages", value: "C, Java, JavaScript, TypeScript, Python, R", color: "#7cd7e8" },
-  { key: "stack", value: "React, Next.js, Node.js, Express, Django", color: "#f5d96e" },
-  { key: "db", value: "PostgreSQL, MySQL, MongoDB, Redis, SQLite", color: "#f08ab8" },
-  { key: "tools", value: "Git, Docker, GitHub Actions, Contentful, S3", color: "#7aa8f0" },
+  { key: "distro", value: "Windows 11", color: "#8bd5ca" },
+  { key: "host", value: "Roe Dizon", color: "#eed49f" },
+  { key: "uptime", value: "21 years", color: "#a6da95" },
+  { key: "kernel", value: "Software Developer Intern @ Siklab, Tech Lead @ LSCS", color: "#f5bde6" },
+  { key: "school", value: "BS Computer Science @ De La Salle University Manila", color: "#8aadf4" },
+  { key: "shell", value: "PowerShell + WezTerm", color: "#c6a0f6" },
+  { key: "wm", value: "GlazeWM + Zebar", color: "#f5a97f" },
+  { key: "editor", value: "Neovim", color: "#a6da95" },
+  { key: "languages", value: "C, Java, JavaScript, TypeScript, Python, R", color: "#91d7e3" },
+  { key: "stack", value: "React, Next.js, Node.js, Express, Django", color: "#eed49f" },
+  { key: "db", value: "PostgreSQL, MySQL, MongoDB, Redis, SQLite", color: "#ee99a0" },
+  { key: "tools", value: "Git, Docker, GitHub Actions, Contentful, S3", color: "#b7bdf8" },
 ];
 
-const PALETTE = ["#f07878", "#f5a96e", "#f5d96e", "#a8e890", "#7cd7e8", "#7aa8f0", "#c79af0", "#f08ab8"];
+const PALETTE = ["#ed8796", "#f5a97f", "#eed49f", "#a6da95", "#8bd5ca", "#8aadf4", "#c6a0f6", "#f5bde6"];
 
 function esc(s: string): string {
   return s
@@ -91,18 +91,18 @@ export async function GET() {
   const cardStartX = 30;
 
   const statCards = [
-    { label: "public repos", value: stats.repos, color: "#a8e890" },
-    { label: "followers", value: stats.followers, color: "#7cd7e8" },
-    { label: "following", value: stats.following, color: "#f08ab8" },
-    { label: "total stars", value: stats.stars, color: "#f5d96e" },
+    { label: "public repos", value: stats.repos, color: "#a6da95" },
+    { label: "followers", value: stats.followers, color: "#8bd5ca" },
+    { label: "following", value: stats.following, color: "#f5bde6" },
+    { label: "total stars", value: stats.stars, color: "#eed49f" },
   ];
 
   const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" font-family="ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1a1f2e"/>
-      <stop offset="100%" stop-color="#141826"/>
+      <stop offset="0%" stop-color="#24273a"/>
+      <stop offset="100%" stop-color="#1e2030"/>
     </linearGradient>
     <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="2.5"/>
@@ -116,14 +116,14 @@ export async function GET() {
   </defs>
 
   <rect width="${W}" height="${H}" fill="url(#bg)" rx="12"/>
-  <rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" fill="none" stroke="#2a3145" rx="12"/>
+  <rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" fill="none" stroke="#494d64" rx="12"/>
 
-  <circle cx="22" cy="22" r="6" fill="#f07878"/>
-  <circle cx="42" cy="22" r="6" fill="#f5d96e"/>
-  <circle cx="62" cy="22" r="6" fill="#a8e890"/>
-  <text x="${W / 2}" y="26" fill="#8892b0" font-size="12" text-anchor="middle">solenad@github</text>
+  <circle cx="22" cy="22" r="6" fill="#ed8796"/>
+  <circle cx="42" cy="22" r="6" fill="#eed49f"/>
+  <circle cx="62" cy="22" r="6" fill="#a6da95"/>
+  <text x="${W / 2}" y="26" fill="#a5adcb" font-size="12" text-anchor="middle">solenad@github</text>
 
-  <g transform="translate(${asciiX}, ${asciiY})" fill="#7cd7e8">
+  <g transform="translate(${asciiX}, ${asciiY})" fill="#8bd5ca">
     <g filter="url(#glow)" opacity="0.55">
       ${asciiLines
       .map(
@@ -141,15 +141,15 @@ export async function GET() {
   </g>
 
   <text x="${infoX}" y="${headerY}" font-size="18" font-weight="700">
-    <tspan fill="#a8e890">solenad</tspan><tspan fill="#8892b0">@</tspan><tspan fill="#f5d96e">github</tspan>
+    <tspan fill="#a6da95">solenad</tspan><tspan fill="#a5adcb">@</tspan><tspan fill="#eed49f">github</tspan>
   </text>
-  <text x="${infoX}" y="${headerY + 22}" fill="#3a4258" font-size="13" xml:space="preserve">${"─".repeat(48)}</text>
+  <text x="${infoX}" y="${headerY + 22}" fill="#363a4f" font-size="13" xml:space="preserve">${"─".repeat(48)}</text>
 
   ${INFO.map((row, i) => {
         const y = rowStartY + i * rowH;
         return `<g>
     <text x="${infoX}" y="${y}" font-size="13" font-weight="700" fill="${row.color}">${esc(row.key)}</text>
-    <text x="${infoX + keyColW}" y="${y}" font-size="13" fill="#e8e6d8">${esc(row.value)}</text>
+    <text x="${infoX + keyColW}" y="${y}" font-size="13" fill="#cad3f5">${esc(row.value)}</text>
   </g>`;
       }).join("\n  ")}
 
@@ -160,26 +160,26 @@ export async function GET() {
       ).join("\n    ")}
   </g>
 
-  <text x="30" y="${statsY - 20}" fill="#3a4258" font-size="13" xml:space="preserve">${"━".repeat(95)}</text>
+  <text x="30" y="${statsY - 20}" fill="#363a4f" font-size="13" xml:space="preserve">${"━".repeat(95)}</text>
   <text x="30" y="${statsY - 38}" font-size="13">
-    <tspan fill="#a8e890">~</tspan><tspan fill="#8892b0"> </tspan><tspan fill="#7aa8f0">❯</tspan><tspan fill="#e8e6d8" xml:space="preserve"> gh stats --user Solenad</tspan>
+    <tspan fill="#a6da95">~</tspan><tspan fill="#a5adcb"> </tspan><tspan fill="#8aadf4">❯</tspan><tspan fill="#cad3f5" xml:space="preserve"> gh stats --user Solenad</tspan>
   </text>
 
   ${statCards
       .map((s, i) => {
         const x = cardStartX + i * (cardW + cardGap);
         return `<g>
-    <rect x="${x}" y="${statsY}" width="${cardW}" height="${cardH}" rx="8" fill="#1f2536" stroke="#2a3145"/>
+    <rect x="${x}" y="${statsY}" width="${cardW}" height="${cardH}" rx="8" fill="#363a4f" stroke="#494d64"/>
     <text x="${x + 16}" y="${statsY + 50}" font-size="34" font-weight="700" fill="${s.color}">${s.value.toLocaleString()}</text>
-    <text x="${x + 16}" y="${statsY + 74}" font-size="12" fill="#8892b0">${esc(s.label)}</text>
+    <text x="${x + 16}" y="${statsY + 74}" font-size="12" fill="#a5adcb">${esc(s.label)}</text>
   </g>`;
       })
       .join("\n  ")}
 
   <text x="30" y="${H - 30}" font-size="13">
-    <tspan fill="#a8e890">~</tspan><tspan fill="#8892b0"> </tspan><tspan fill="#7aa8f0">❯</tspan><tspan fill="#e8e6d8" xml:space="preserve"> cat ~/.bio</tspan>
+    <tspan fill="#a6da95">~</tspan><tspan fill="#a5adcb"> </tspan><tspan fill="#8aadf4">❯</tspan><tspan fill="#cad3f5" xml:space="preserve"> cat ~/.bio</tspan>
   </text>
-  <text x="30" y="${H - 12}" font-size="12" fill="#8892b0">
+  <text x="30" y="${H - 12}" font-size="12" fill="#a5adcb">
   </text>
 </svg>`;
 

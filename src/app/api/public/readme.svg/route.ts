@@ -122,10 +122,6 @@ async function fetchStats() {
 const TW_P1 = "i have something very important to say";
 const TW_P2 = "tung tung tung sahur";
 const TW_CYCLE_MS = 9500;
-/** Estimated monospace character width (px) at font-size 13 */
-const CHAR_W = 8;
-/** Extra px to keep cursor clearly ahead of the last typed character */
-const CUR_AHEAD = 0;
 const TW_PHASE: Array<{ dur: number; label: string }> = [
   { dur: 2400, label: "type p1" }, // 0–1200ms
   { dur: 1500, label: "hold p1" }, // 1200–2700ms
@@ -209,77 +205,22 @@ function genTwCSS(): string {
   p2Stops.push(`    ${pct(p2Hold).toFixed(2)}%{clip-path:inset(0 0% 0 0)}`);
   p2Stops.push(`    100%{clip-path:inset(0 0% 0 0)}`);
 
-  // ── cursor visibility ──
-  // Hidden during typing/deleting, visible during pauses (blinks via .blink)
-  const cStops: string[] = [];
-  // type p1 → hidden
-  cStops.push(`    0%{opacity:0}`);
-  cStops.push(`    ${pct(p1InEnd).toFixed(2)}%{opacity:0}`);
-  // hold p1 → visible
-  cStops.push(`    ${(pct(p1InEnd) + 0.05).toFixed(2)}%{opacity:1}`);
-  cStops.push(`    ${pct(p1Hold).toFixed(2)}%{opacity:1}`);
-  // delete p1 → hidden
-  cStops.push(`    ${(pct(p1Hold) + 0.05).toFixed(2)}%{opacity:0}`);
-  cStops.push(`    ${pct(p1Out).toFixed(2)}%{opacity:0}`);
-  // hold empty → visible
-  cStops.push(`    ${(pct(p1Out) + 0.05).toFixed(2)}%{opacity:1}`);
-  cStops.push(`    ${pct(p2In).toFixed(2)}%{opacity:1}`);
-  // type p2 → hidden
-  cStops.push(`    ${(pct(p2In) + 0.05).toFixed(2)}%{opacity:0}`);
-  cStops.push(`    ${pct(p2InEnd).toFixed(2)}%{opacity:0}`);
-  // hold p2 → visible
-  cStops.push(`    ${(pct(p2InEnd) + 0.05).toFixed(2)}%{opacity:1}`);
-  cStops.push(`    100%{opacity:1}`);
-
-  // ── cursor position (stays CUR_AHEAD px ahead of typed text) ──
-  const cposStops: string[] = [];
-  // type p1: move right
-  for (let i = 0; i <= chars1; i++) {
-    const t = pct(p1In + (i / chars1) * (p1InEnd - p1In));
-    cposStops.push(
-      `    ${t.toFixed(2)}%{transform:translateX(${i * CHAR_W + CUR_AHEAD}px)}`,
-    );
-  }
-  // hold p1
-  cposStops.push(
-    `    ${pct(p1Hold).toFixed(2)}%{transform:translateX(${chars1 * CHAR_W + CUR_AHEAD}px)}`,
-  );
-  // delete p1: move left
-  for (let i = 1; i <= chars1; i++) {
-    const t = pct(p1Hold + (i / chars1) * (p1Out - p1Hold));
-    cposStops.push(
-      `    ${t.toFixed(2)}%{transform:translateX(${(chars1 - i) * CHAR_W + CUR_AHEAD}px)}`,
-    );
-  }
-  // hold empty
-  cposStops.push(
-    `    ${pct(p1Out).toFixed(2)}%{transform:translateX(${CUR_AHEAD}px)}`,
-  );
-  cposStops.push(
-    `    ${pct(p2In).toFixed(2)}%{transform:translateX(${CUR_AHEAD}px)}`,
-  );
-  // type p2: move right
-  for (let i = 1; i <= chars2; i++) {
-    const t = pct(p2In + (i / chars2) * (p2InEnd - p2In));
-    cposStops.push(
-      `    ${t.toFixed(2)}%{transform:translateX(${i * CHAR_W + CUR_AHEAD}px)}`,
-    );
-  }
-  // hold p2
-  cposStops.push(
-    `    ${pct(p2Hold).toFixed(2)}%{transform:translateX(${chars2 * CHAR_W + CUR_AHEAD}px)}`,
-  );
-  cposStops.push(
-    `    100%{transform:translateX(${chars2 * CHAR_W + CUR_AHEAD}px)}`,
-  );
+  // ── empty-phase cursor (visible only during "hold empty") ──
+  const cemptyStops: string[] = [];
+  cemptyStops.push(`    0%{opacity:0}`);
+  cemptyStops.push(`    ${pct(p1Out).toFixed(2)}%{opacity:0}`);
+  cemptyStops.push(`    ${(pct(p1Out) + 0.05).toFixed(2)}%{opacity:1}`);
+  cemptyStops.push(`    ${pct(p2In).toFixed(2)}%{opacity:1}`);
+  cemptyStops.push(`    ${(pct(p2In) + 0.05).toFixed(2)}%{opacity:0}`);
+  cemptyStops.push(`    100%{opacity:0}`);
 
   return `
       @keyframes tw-p1{${p1Stops.join("")}}
       @keyframes tw-p2{${p2Stops.join("")}}
-      @keyframes tw-cpos{${cposStops.join("")}}
+      @keyframes tw-cempty{${cemptyStops.join("")}}
       .tw-p1{animation:tw-p1 ${TW_CYCLE_MS}ms step-end infinite}
       .tw-p2{animation:tw-p2 ${TW_CYCLE_MS}ms step-end infinite}
-      .tw-cpos{animation:tw-cpos ${TW_CYCLE_MS}ms step-end infinite}
+      .tw-cempty{animation:tw-cempty ${TW_CYCLE_MS}ms step-end infinite}
       .tw-box{clip-path:inset(0 100% 0 0)}`;
 }
 
@@ -426,13 +367,13 @@ export async function GET() {
     <tspan fill="#a6da95">~</tspan><tspan fill="#a5adcb"> </tspan><tspan fill="#8aadf4">❯</tspan><tspan fill="#a5adcb"> </tspan>
   </text>
   <g class="tw-p1 tw-box">
-    <text x="65" y="${H - 30}" font-size="13" fill="#cad3f5">${esc(TW_P1)}</text>
+    <text x="65" y="${H - 30}" font-size="13" font-family="monospace" fill="#cad3f5">${esc(TW_P1)}<tspan><animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.49;0.5;1" dur="1s" repeatCount="indefinite" />▍</tspan></text>
   </g>
   <g class="tw-p2 tw-box">
-    <text x="65" y="${H - 30}" font-size="13" fill="#cad3f5">${esc(TW_P2)}</text>
+    <text x="65" y="${H - 30}" font-size="13" font-family="monospace" fill="#cad3f5">${esc(TW_P2)}<tspan><animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.49;0.5;1" dur="1s" repeatCount="indefinite" />▍</tspan></text>
   </g>
-  <g class="tw-cpos">
-    <text x="65" y="${H - 30}" font-size="13" fill="#cad3f5">▍</text>
+  <g class="tw-cempty">
+    <text x="65" y="${H - 30}" font-size="13" font-family="monospace" fill="#cad3f5"><animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.49;0.5;1" dur="1s" repeatCount="indefinite" />▍</text>
   </g>
   <text x="30" y="${H - 12}" font-size="12" fill="#a5adcb">
   </text>

@@ -1,4 +1,10 @@
-const ASCII = `⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+const ASCII = `
+⠀
+
+
+
+
+⠀⠀⠀⠀⠀⠀⠀⠀⣀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⢠⣾⠟⠓⣯⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡠⣾⠞⠳⣷⣄⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⣏⣿⠀⠀⠿⣾⠶⠾⠶⠶⠶⠶⠭⢶⣶⣿⣇⠀⢀⣿⣿⡀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⢠⣮⡏⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠀⠀⠀⠈⢿⣕⢄⠀⠀⠀
@@ -347,17 +353,19 @@ export async function GET() {
       .crt-scan { animation: scan-scroll 1.2s linear infinite; transform-origin: 0 0; mix-blend-mode: overlay; }
       @keyframes beam-sweep {
         0%   { transform: translateY(-40px); }
-        10%  { transform: translateY(80px); }
-        22%  { transform: translateY(200px); }
-        30%  { transform: translateY(240px); }
-        45%  { transform: translateY(370px); }
-        52%  { transform: translateY(400px); }
-        68%  { transform: translateY(530px); }
-        75%  { transform: translateY(560px); }
-        88%  { transform: translateY(660px); }
-        100% { transform: translateY(760px); }
+        0%   { transform: translateY(-40px); }
+        8%   { transform: translateY(60px); }
+        18%  { transform: translateY(160px); }
+        26%  { transform: translateY(200px); }
+        40%  { transform: translateY(340px); }
+        48%  { transform: translateY(370px); }
+        62%  { transform: translateY(500px); }
+        70%  { transform: translateY(530px); }
+        85%  { transform: translateY(760px); }  /* reaches bottom */
+        100% { transform: translateY(760px); }  /* hold before flyback */
+        100% { transform: translateY(760px); }  /* hold before flyback */
       }
-      .crt-beam { animation: beam-sweep 9s linear infinite; transform-origin: 0 0; pointer-events: none; mix-blend-mode: screen; }
+      .crt-beam { animation: beam-sweep 11.25s linear infinite; transform-origin: 0 0; pointer-events: none; mix-blend-mode: screen; }
     </style>
   </defs>
 

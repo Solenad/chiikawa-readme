@@ -25,7 +25,7 @@ export default function Page() {
     <main className="min-h-screen px-4 py-10 sm:px-8">
       <div className="mx-auto max-w-4xl">
         <h1 className="mb-2 text-2xl font-bold">
-          <span className="text-term-green">roe's github readme card</span>
+          <span className="text-term-green">roe&apos;s github readme card</span>
         </h1>
         <p className="mb-8 text-sm text-muted-foreground">
           Live preview of the SVG GitHub will render. Stats refresh every ~30

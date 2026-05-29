@@ -4,6 +4,7 @@ import { Providers } from "./providers";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://riceme.rohann.qzz.io/"),
   title: "RiceMe",
   description:
     "RiceMe: generate dynamic terminal-style SVG cards for GitHub READMEs with 23+ color themes.",

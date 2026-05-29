@@ -218,6 +218,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const username = searchParams.get("username") || "Solenad";
   const showAscii = searchParams.get("ascii") !== "0";
+  const customAscii = searchParams.get("ascii_art");
   const info = buildInfo(searchParams);
   const stats = await fetchStats(username);
 
@@ -228,7 +229,9 @@ export async function GET(request: Request) {
   const asciiY = 50;
   const asciiSize = 11;
   const asciiLineH = 12;
-  const asciiLines = ASCII.split("\n");
+  const asciiLines = showAscii
+    ? (customAscii ? customAscii.split("\n") : ASCII.split("\n"))
+    : [];
 
   const infoX = showAscii ? 340 : 30;
   const headerY = 70;

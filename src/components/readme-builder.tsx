@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 const FIELD_DEFS = [
   { key: "distro", label: "Distro", color: "#8bd5ca", placeholder: "Windows 11" },
@@ -76,6 +77,7 @@ export function ReadmeBuilder() {
   const [fetchTarget, setFetchTarget] = useState<string | null>(null);
   const [fields, setFields] = useState<Record<string, string>>({ ...DEFAULT_VALUES });
   const [showAscii, setShowAscii] = useState(true);
+  const [customAscii, setCustomAscii] = useState("");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   useEffect(() => {
@@ -107,8 +109,9 @@ export function ReadmeBuilder() {
 
   const debouncedFields = useDebounce(fields, 500);
   const debouncedUsername = useDebounce(username, 500);
+  const debouncedAscii = useDebounce(customAscii, 500);
 
-  const previewUrl = buildPreviewUrl(origin, debouncedUsername, debouncedFields, showAscii);
+  const previewUrl = buildPreviewUrl(origin, debouncedUsername, debouncedFields, showAscii, debouncedAscii);
 
   const updateField = useCallback((key: string, value: string) => {
     setFields((prev) => ({ ...prev, [key]: value }));
@@ -133,7 +136,7 @@ export function ReadmeBuilder() {
     );
   }, []);
 
-  const fullUrl = buildPreviewUrl(origin, username, fields, showAscii);
+  const fullUrl = buildPreviewUrl(origin, username, fields, showAscii, customAscii);
   const markdown = `![${username}](${fullUrl})`;
   const html = `<p align="center">\n  <img src="${fullUrl}" alt="${username}" />\n</p>`;
 
@@ -184,6 +187,20 @@ export function ReadmeBuilder() {
               Show ASCII art
             </Label>
           </div>
+          {showAscii && (
+            <div className="mt-3">
+              <Label htmlFor="ascii-art" className="mb-1 block text-xs text-muted-foreground">
+                Custom ASCII art (optional &mdash; paste your own)
+              </Label>
+              <Textarea
+                id="ascii-art"
+                value={customAscii}
+                onChange={(e) => setCustomAscii(e.target.value)}
+                placeholder="Paste your ASCII art here..."
+                className="max-h-48 min-h-[80px] font-mono text-xs leading-tight placeholder:text-muted-foreground/30"
+              />
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
@@ -286,6 +303,7 @@ function buildPreviewUrl(
   username: string,
   fields: Record<string, string>,
   showAscii: boolean,
+  customAscii?: string,
 ): string {
   const params = new URLSearchParams();
   params.set("username", username || "Solenad");
@@ -293,6 +311,7 @@ function buildPreviewUrl(
   for (const [key, value] of Object.entries(fields)) {
     if (value) params.set(key, value);
   }
+  if (customAscii) params.set("ascii_art", customAscii);
   const base = origin || "http://localhost:3000";
   return `${base}/api/public/readme.svg?${params.toString()}`;
 }

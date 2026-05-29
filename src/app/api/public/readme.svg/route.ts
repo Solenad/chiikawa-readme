@@ -273,6 +273,31 @@ export async function GET(request: Request) {
   </g>`
     : "";
 
+  const crtOverlay = showCrt
+    ? `
+  <g class="crt-scan">
+    <rect class="crt-layer" width="${W}" height="${H}" fill="url(#scanlines)" opacity="0.25" pointer-events="none"/>
+  </g>
+  <rect class="crt-beam" width="${W}" height="20" fill="url(#crt-beam)"/>
+  <rect class="crt-layer" width="${W}" height="${H}" fill="url(#vignette)" pointer-events="none"/>
+  `
+    : "";
+
+  const crtCss = showCrt
+    ? `
+      .crt-layer { pointer-events: none; }
+      @keyframes scan-scroll { 0% { transform: translateY(0); } 100% { transform: translateY(-4px); } }
+      .crt-scan { animation: scan-scroll 1.2s linear infinite; transform-origin: 0 0; mix-blend-mode: overlay; }
+      @keyframes beam-sweep {
+        0%   { transform: translateY(-40px); }
+        20%  { transform: translateY(-40px); }
+        85%  { transform: translateY(760px); }
+        100% { transform: translateY(760px); }
+      }
+      .crt-beam { animation: beam-sweep 25s linear infinite; transform-origin: 0 0; pointer-events: none; mix-blend-mode: screen; }
+    `
+    : "";
+
   const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" font-family="ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace">
   <defs>
@@ -307,17 +332,7 @@ export async function GET(request: Request) {
       @keyframes glow { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
       .pulse { animation: glow 2.5s ease-in-out infinite; }
       ${genTwCSS()}
-      ${showCrt ? `
-      .crt-layer { pointer-events: none; }
-      @keyframes scan-scroll { 0% { transform: translateY(0); } 100% { transform: translateY(-4px); } }
-      .crt-scan { animation: scan-scroll 1.2s linear infinite; transform-origin: 0 0; mix-blend-mode: overlay; }
-      @keyframes beam-sweep {
-        0%   { transform: translateY(-40px); }
-        20%  { transform: translateY(-40px); }
-        85%  { transform: translateY(760px); }
-        100% { transform: translateY(760px); }
-      }
-      .crt-beam { animation: beam-sweep 25s linear infinite; transform-origin: 0 0; pointer-events: none; mix-blend-mode: screen; }
+      ${crtCss}
     </style>
   </defs>
 
@@ -383,13 +398,7 @@ export async function GET(request: Request) {
   </g>
   <text x="30" y="${H - 12}" font-size="12" fill="#a5adcb">
   </text>
-  ${showCrt ? `
-  <g class="crt-scan">
-    <rect class="crt-layer" width="${W}" height="${H}" fill="url(#scanlines)" opacity="0.25" pointer-events="none"/>
-  </g>
-  <rect class="crt-beam" width="${W}" height="20" fill="url(#crt-beam)"/>
-  <rect class="crt-layer" width="${W}" height="${H}" fill="url(#vignette)" pointer-events="none"/>
-  ` : ""}
+  ${crtOverlay}
 </svg>`;
 
   return new Response(svg, {

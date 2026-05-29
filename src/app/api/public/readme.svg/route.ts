@@ -90,20 +90,20 @@ async function fetchStats(username: string) {
   try {
     const [uRes, rRes] = await Promise.all([
       fetch(`https://api.github.com/users/${username}`, {
-        headers: { "User-Agent": "chiikawa-readme-svg" },
+        headers: { "User-Agent": "fastfetch-readme-svg" },
       }),
       fetch(`https://api.github.com/users/${username}/repos?per_page=100`, {
-        headers: { "User-Agent": "chiikawa-readme-svg" },
+        headers: { "User-Agent": "fastfetch-readme-svg" },
       }),
     ]);
     const u = await uRes.json();
     const repos = await rRes.json();
     const stars = Array.isArray(repos)
       ? repos.reduce(
-          (a: number, r: { stargazers_count?: number }) =>
-            a + (r.stargazers_count ?? 0),
-          0,
-        )
+        (a: number, r: { stargazers_count?: number }) =>
+          a + (r.stargazers_count ?? 0),
+        0,
+      )
       : 0;
     return {
       repos: u?.public_repos ?? 0,
@@ -218,6 +218,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const username = searchParams.get("username") || "Solenad";
   const showAscii = searchParams.get("ascii") !== "0";
+  const showCrt = searchParams.get("crt") !== "0";
   const customAscii = searchParams.get("ascii_art");
   const info = buildInfo(searchParams);
   const stats = await fetchStats(username);
@@ -257,11 +258,11 @@ export async function GET(request: Request) {
   <g transform="translate(${asciiX}, ${asciiY})" fill="#8bd5ca">
     <g filter="url(#glow)" opacity="0.55">
       ${asciiLines
-        .map(
-          (line, i) =>
-            `<text x="0" y="${i * asciiLineH}" font-size="${asciiSize}" xml:space="preserve">${esc(line)}</text>`,
-        )
-        .join("\n      ")}
+      .map(
+        (line, i) =>
+          `<text x="0" y="${i * asciiLineH}" font-size="${asciiSize}" xml:space="preserve">${esc(line)}</text>`,
+      )
+      .join("\n      ")}
     </g>
     ${asciiLines
       .map(
@@ -306,6 +307,7 @@ export async function GET(request: Request) {
       @keyframes glow { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
       .pulse { animation: glow 2.5s ease-in-out infinite; }
       ${genTwCSS()}
+      ${showCrt ? `
       .crt-layer { pointer-events: none; }
       @keyframes scan-scroll { 0% { transform: translateY(0); } 100% { transform: translateY(-4px); } }
       .crt-scan { animation: scan-scroll 1.2s linear infinite; transform-origin: 0 0; mix-blend-mode: overlay; }
@@ -335,20 +337,20 @@ export async function GET(request: Request) {
   <text x="${infoX}" y="${headerY + 22}" fill="#363a4f" font-size="13" xml:space="preserve">${"─".repeat(showAscii ? 48 : 80)}</text>
 
   ${info
-    .map((row, i) => {
-      const y = rowStartY + i * rowH;
-      return `<g>
+        .map((row, i) => {
+          const y = rowStartY + i * rowH;
+          return `<g>
     <text x="${infoX}" y="${y}" font-size="13" font-weight="700" fill="${row.color}">${esc(row.key)}</text>
     <text x="${infoX + keyColW}" y="${y}" font-size="13" fill="#cad3f5">${esc(row.value)}</text>
   </g>`;
-    })
-    .join("\n  ")}
+        })
+        .join("\n  ")}
 
   <g filter="url(#phosphor-glow)" transform="translate(${infoX}, ${rowStartY + info.length * rowH + 14})">
     ${PALETTE.map(
-      (c, i) =>
-        `<circle cx="${i * 22 + 8}" cy="8" r="7" fill="${c}" class="pulse" style="animation-delay: ${i * 0.15}s"/>`,
-    ).join("\n    ")}
+          (c, i) =>
+            `<circle cx="${i * 22 + 8}" cy="8" r="7" fill="${c}" class="pulse" style="animation-delay: ${i * 0.15}s"/>`,
+        ).join("\n    ")}
   </g>
 
   <text x="30" y="${statsY - 20}" fill="#363a4f" font-size="13" xml:space="preserve">${"━".repeat(95)}</text>
@@ -357,15 +359,15 @@ export async function GET(request: Request) {
   </text>
 
   ${statCards
-    .map((s, i) => {
-      const x = cardStartX + i * (cardW + cardGap);
-      return `<g>
+        .map((s, i) => {
+          const x = cardStartX + i * (cardW + cardGap);
+          return `<g>
     <rect x="${x}" y="${statsY}" width="${cardW}" height="${cardH}" rx="8" fill="#363a4f" stroke="#494d64"/>
     <text x="${x + 16}" y="${statsY + 50}" font-size="34" font-weight="700" fill="${s.color}" filter="url(#phosphor-glow)">${s.value.toLocaleString()}</text>
     <text x="${x + 16}" y="${statsY + 74}" font-size="12" fill="#a5adcb">${esc(s.label)}</text>
   </g>`;
-    })
-    .join("\n  ")}
+        })
+        .join("\n  ")}
 
   <text x="30" y="${H - 30}" font-size="13" filter="url(#phosphor-glow)">
     <tspan fill="#a6da95">~</tspan><tspan fill="#a5adcb"> </tspan><tspan fill="#8aadf4">❯</tspan><tspan fill="#a5adcb"> </tspan>
@@ -381,11 +383,13 @@ export async function GET(request: Request) {
   </g>
   <text x="30" y="${H - 12}" font-size="12" fill="#a5adcb">
   </text>
+  ${showCrt ? `
   <g class="crt-scan">
     <rect class="crt-layer" width="${W}" height="${H}" fill="url(#scanlines)" opacity="0.25" pointer-events="none"/>
   </g>
   <rect class="crt-beam" width="${W}" height="20" fill="url(#crt-beam)"/>
   <rect class="crt-layer" width="${W}" height="${H}" fill="url(#vignette)" pointer-events="none"/>
+  ` : ""}
 </svg>`;
 
   return new Response(svg, {

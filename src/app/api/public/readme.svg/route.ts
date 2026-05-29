@@ -200,7 +200,7 @@ export async function GET(request: Request) {
   const asciiSize = 11;
   const asciiLineH = 12;
   const asciiLines = showAscii
-    ? (customAscii ? customAscii.split("\n") : ASCII.split("\n"))
+    ? (customAscii ? customAscii.replace(/\\n/g, "\n").replace(/\r/g, "").split("\n") : ASCII.split("\n"))
     : [];
 
   const infoX = showAscii ? 340 : 30;

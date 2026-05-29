@@ -556,7 +556,7 @@ function buildPreviewUrl(
   for (const [key, value] of Object.entries(fields)) {
     params.set(key, value);
   }
-  if (customAscii) params.set("ascii_art", customAscii);
+  if (customAscii) params.set("ascii_art", customAscii.replace(/\n/g, "\\n"));
   const base = origin || "http://localhost:3000";
   return `${base}/api/public/readme.svg?${params.toString()}`;
 }

@@ -41,7 +41,7 @@ export default function RootLayout({
                   <span className="text-term-blue">❯</span> built with Next.js +
                   shadcn/ui ·{" "}
                   <a
-                    href="https://github.com/Solenad/chiikawa-readme"
+                    href="https://github.com/Solenad/riceme-readme-generator"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-bold text-term-cyan hover:underline"

@@ -4,7 +4,7 @@
 
 **terminal aesthetic for your GitHub README**
 
-![MIT License](https://img.shields.io/badge/license-MIT-7e9cd8?style=for-the-badge)
+![License](https://img.shields.io/github/license/Solenad/chiikawa-readme?style=for-the-badge&color=7e9cd8)
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-7e9cd8?style=for-the-badge)
 ![React 19](https://img.shields.io/badge/React-19-7e9cd8?style=for-the-badge)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-7e9cd8?style=for-the-badge)
@@ -12,7 +12,8 @@
 ![GitHub Stars](https://img.shields.io/github/stars/Solenad/chiikawa-readme?style=for-the-badge&logo=github&color=7e9cd8)
 
 </div>
-<img width="1919" height="990" alt="image" src="https://github.com/user-attachments/assets/81748fe4-5779-4e50-adcf-90e1b0a13341" />
+
+![RiceMe screenshot](https://github.com/user-attachments/assets/81748fe4-5779-4e50-adcf-90e1b0a13341)
 
 ## What is this?
 
@@ -69,11 +70,24 @@ src/
 └── lib/
     ├── themes.ts                         # 23 color theme definitions
     └── utils.ts                          # cn() helper (clsx + tailwind-merge)
+openspec/
+├── config.yaml
+├── specs/
+│   └── typewriter-footer/               # Planned feature specs
+└── changes/
+.github/
+└── pull_request_template.md             # PR template
 ```
 
-## API
+## Documentation
 
-The SVG endpoint is at:
+| Resource | Description |
+|----------|-------------|
+| [AGENTS.md](AGENTS.md) | Next.js version conventions and gotchas |
+| [PR Template](.github/pull_request_template.md) | Pull request guidelines |
+| [OpenSpec Proposals](openspec/specs/) | Planned features and design docs |
+
+## API
 
 ```
 GET /api/public/readme.svg
@@ -88,12 +102,6 @@ GET /api/public/readme.svg
 | `ascii_art` | string | — | Custom ASCII art |
 | `distro`, `host`, `uptime`, `kernel`, `school`, `shell`, `wm`, `editor`, `languages`, `stack`, `db`, `tools`, `ai` | string | — | Custom field values |
 
-## Contributing
-
-Contributions are welcome! Open an issue or pull request on [GitHub](https://github.com/Solenad/chiikawa-readme). For planned work, see the [openspec proposals](openspec/specs/).
-
-This project uses Next.js 16 conventions — see `AGENTS.md` for details.
-
 ## Tech Stack
 
 | Layer | Technology |
@@ -102,13 +110,22 @@ This project uses Next.js 16 conventions — see `AGENTS.md` for details.
 | UI Library | [React 19.2](https://react.dev) |
 | Language | [TypeScript 5](https://www.typescriptlang.org) |
 | Styling | [Tailwind CSS 4](https://tailwindcss.com) + [tw-animate-css](https://github.com/tailwindlabs/tailwindcss-animate) |
-| UI Primitives | [Radix UI](https://www.radix-ui.com) + [shadcn/ui](https://ui.shadcn.com) approach |
+| UI Primitives | [Radix UI](https://www.radix-ui.com) + [shadcn/ui](https://ui.shadcn.com) |
 | Data Fetching | [TanStack React Query 5](https://tanstack.com/query/latest) |
 | Icons | [Lucide React](https://lucide.dev) |
-| Charts | [Recharts](https://recharts.org) (available) |
-| Forms | [react-hook-form](https://react-hook-form.com) (available) |
-| Package Manager | npm |
+| Animation | [Motion](https://motion.dev) |
+| Charts | [Recharts](https://recharts.org) |
+| Deployment | [OpenNext Cloudflare](https://opennext.js.org/cloudflare) + [Wrangler](https://developers.cloudflare.com/workers/wrangaller/) |
+
+## Contributing
+
+Contributions are welcome! Open an issue or pull request on [GitHub](https://github.com/Solenad/chiikawa-readme). For planned work, see the [openspec proposals](openspec/specs/).
+
+<a href="https://github.com/Solenad/chiikawa-readme/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Solenad/chiikawa-readme" />
+</a>
 
 ## License
 
 MIT © 2026 roe
+

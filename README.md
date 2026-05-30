@@ -119,7 +119,7 @@ GET /api/public/readme.svg
 
 ## Contributing
 
-Contributions are welcome! Open an issue or pull request on [GitHub](https://github.com/Solenad/chiikawa-readme). For planned work, see the [openspec proposals](openspec/specs/).
+Contributions are welcome! Open an issue or pull request on [GitHub](https://github.com/Solenad/chiikawa-readme).
 
 <a href="https://github.com/Solenad/chiikawa-readme/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Solenad/chiikawa-readme" />
